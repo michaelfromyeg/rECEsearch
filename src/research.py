@@ -67,7 +67,9 @@ def read(filename: str) -> List[Data]:
       for row in csv_reader:
           # Parse headers
           if line_count == 0:
-              print(f'{bcolors.WARNING}Column names are {", ".join(row)}. You should have Course, Name, Email (in that order); if you do not, please consult the README.md.{bcolors.ENDC}')
+              print(f'{bcolors.WARNING}Column names are {", ".join(row)}. 
+                You should have Course, Name, Email (in that order); 
+                if you do not, please consult the README.md.{bcolors.ENDC}')
               line_count += 1
           # Append row to lod
           else:
