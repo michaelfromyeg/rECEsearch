@@ -30,6 +30,10 @@ pip freeze > requirements.txt
 
 Run `python research.py -i <input file> -o <output file>`, where 'input file' is the name of a CSV file containing professor names. See `research.py` for more information on the anticipated structure of the CSV data.
 
+### Example
+
+![Example program output](./images/output.png)
+
 ## Future
 
 Collect research from more sources, export to RSS feed.
