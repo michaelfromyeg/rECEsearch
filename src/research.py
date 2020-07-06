@@ -37,7 +37,7 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-debug = True
+debug = False
 
 # Functions
 
@@ -45,6 +45,8 @@ def main(filenames: [str, str]) -> None:
   '''
   Read data, analyze it, and output it
   '''
+  if (debug):
+    print('Starting in debug mode...')
   input_file = filenames[0]
   output_file = filenames[1]
   generate(read(input_file), output_file)
@@ -102,21 +104,45 @@ def research(lod: List[Data]) -> List[Research]:
 
     lab = None
     if (debug):
+      # Don't make extra API calls (worried about 429), instead load in "shelved" data
+      # If you don't have any data shelved, add the else case here one once; you could also run p.fill() on the pubs if you want to save 
+      # filled data
       data = shelve.open('data')
       lab = data['biot']
     else:
-      lab = scholarly.search_author_id(id=d.lab_id, fill=True)
+      lab = scholarly.search_author_id(d.lab_id)
+      lab.fill()
+      # try:
+      #   lab.fill()
+      # except AttributeError:
+      #   continue
       
     # Compile all publications
     lop = [] # List[Publication]
+
+    count = 0
+
     # p's type is given by scholarly
-    for p in lab.publications[:2]:
+    for p in lab.publications:
+      # Only collect 50 publications max per lab
+      if (count > 5):
+        break
+      # try:
       p.fill()
+      # except AttributeError:
+      #   continue
       bib = p.bib
-      custom_pub = Publication(bib['title'], bib['author'], int(bib['year']), get_citations(p.cites_per_year), bib['publisher'])
+      custom_pub = None
+      try:
+        custom_pub = Publication(bib['title'], bib['author'], int(bib['year']), get_citations(p.cites_per_year), bib['publisher'])
+      except KeyError:
+        custom_pub = Publication(bib['title'], '', int(bib['year']), get_citations(p.cites_per_year), '')
+        print(bib['title'] + ' was missing information')
       lop.append(custom_pub)
-    
-    # Attach professor to publications
+      count += 1
+
+    # Attach professor to (sorted) publications
+    # TODO: sorted(lop, lambda cp: cp.year)
     r = Research(d.lab, d.lab_id, lop)
     lor.append(r)
   print(f'{bcolors.OKGREEN}Done gathering research! Now creating the output file...{bcolors.ENDC}')
@@ -153,7 +179,7 @@ def format_authors(authors: str) -> str:
   Helper function to *cleanly* format authors
   '''
   if (len(authors) > 20):
-    return authors[:20]
+    return authors[:100] + '...'
   return authors
 
 def get_args(argv: List[str]) -> [str, str]:

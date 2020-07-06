@@ -6,8 +6,9 @@
 */**.dir
 */**.dat
 
-# So I don't get fired ._ .
+# So I don't get fired ._.
 data/ece.csv
+data/labs.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
