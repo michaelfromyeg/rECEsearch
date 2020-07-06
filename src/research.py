@@ -118,7 +118,7 @@ def research(lod: List[Data]) -> List[Research]:
       lop.append(custom_pub)
     
     # Attach professor to publications
-    r = Research({d.lab}, {d.lab_id}, lop)
+    r = Research(d.lab, d.lab_id, lop)
     lor.append(r)
   return lor
 
@@ -130,13 +130,16 @@ def generate(lod: List[Data], output_file: str) -> None:
   lor = research(lod)
 
   # Write list of research data to a csv file
-  o = open(f'../data/{output_file}', 'w')
-  with o:
+  with open(f'../output/{output_file}', 'w', newline='') as o:
     writer = csv.writer(o)
     writer.writerow(['Lab', 'Lab ID', 'Publications'])
-    for row in lor:
-      print(row)
-      writer.writerow(row)
+    r: Research
+    for r in lor:
+      print(r)
+      writer.writerow([r.lab, r.lab_id, '...'])
+      p: Publication
+      for p in r.publications:
+        writer.writerow(['', '', p.title, format_authors(p.authors), p.year, p.citations, p.publisher])
 
   return None
 
@@ -145,6 +148,14 @@ def get_citations(cites_per_year: dict) -> int:
   Helper function to process cites per year to a single number
   '''
   return sum(cites_per_year.values())
+
+def format_authors(authors: str) -> str:
+  '''
+  Helper function to *cleanly* format authors
+  '''
+  if (len(authors) > 20):
+    return authors[:20]
+  return authors
 
 def get_args(argv: List[str]) -> [str, str]:
   input_file = ''
