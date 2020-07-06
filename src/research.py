@@ -1,5 +1,5 @@
 '''
-Collect research data using scholarly
+Collect research data using scholarly; see the README for more!
 '''
 
 from scholarly import scholarly
@@ -105,14 +105,13 @@ def research(lod: List[Data]) -> List[Research]:
       data = shelve.open('data')
       lab = data['biot']
     else:
-      lab = scholarly.search_author_id('ZImFmCUAAAAJ', True)
+      lab = scholarly.search_author_id(id=d.lab_id, fill=True)
       
     # Compile all publications
     lop = [] # List[Publication]
     # p's type is given by scholarly
     for p in lab.publications[:2]:
       p.fill()
-      print(p)
       bib = p.bib
       custom_pub = Publication(bib['title'], bib['author'], int(bib['year']), get_citations(p.cites_per_year), bib['publisher'])
       lop.append(custom_pub)
@@ -120,6 +119,7 @@ def research(lod: List[Data]) -> List[Research]:
     # Attach professor to publications
     r = Research(d.lab, d.lab_id, lop)
     lor.append(r)
+  print(f'{bcolors.OKGREEN}Done gathering research! Now creating the output file...{bcolors.ENDC}')
   return lor
 
 def generate(lod: List[Data], output_file: str) -> None:
@@ -132,15 +132,14 @@ def generate(lod: List[Data], output_file: str) -> None:
   # Write list of research data to a csv file
   with open(f'../output/{output_file}', 'w', newline='') as o:
     writer = csv.writer(o)
-    writer.writerow(['Lab', 'Lab ID', 'Publications'])
+    writer.writerow(['Lab', 'Lab ID', 'Publications', 'Title', 'Author', 'Year', 'Cited By', 'Publisher'])
     r: Research
     for r in lor:
-      print(r)
       writer.writerow([r.lab, r.lab_id, '...'])
       p: Publication
       for p in r.publications:
-        writer.writerow(['', '', p.title, format_authors(p.authors), p.year, p.citations, p.publisher])
-
+        writer.writerow(['', '', '', p.title, format_authors(p.authors), p.year, p.citations, p.publisher])
+  print(f'{bcolors.OKGREEN}Done! Go check out: output/{output_file}.{bcolors.ENDC}')
   return None
 
 def get_citations(cites_per_year: dict) -> int:
@@ -180,4 +179,4 @@ def get_args(argv: List[str]) -> [str, str]:
 
 if __name__ == "__main__":
   main(get_args(sys.argv[1:]))
-  print(f'{bcolors.ENDC}')
+  print(f'{bcolors.ENDC}') # just in case!
