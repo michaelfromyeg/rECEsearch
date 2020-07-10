@@ -32,6 +32,16 @@ pip install -r requirements.txt
 pip freeze > requirements.txt
 ```
 
+### N.B.: As of July 10th, 2020 you should manually tweak the scholarly package to get the desired output from research.py
+
+There's an open issue for this, but for now go to `env/Lib/scholarly/author.py` and change line 10 to read:
+
+```python
+_CITATIONAUTH = '/citations?hl=en&user={0}&sortby=pubdate'
+```
+
+The "sortby=pubdate" is what we're after here.
+
 ## Usage
 
 Run `python research.py -i <input file> -o <output file>`, where 'input file' is the name of a CSV file containing professor names. See `research.py` for more information on the anticipated structure of the CSV data. In general, your input file should have three columns: lab, lab ID, and a URL (in that order).

@@ -111,11 +111,10 @@ def research(lod: List[Data]) -> List[Research]:
       lab = data['biot']
     else:
       lab = scholarly.search_author_id(d.lab_id)
-      lab.fill()
-      # try:
-      #   lab.fill()
-      # except AttributeError:
-      #   continue
+      try:
+        lab.fill()
+      except AttributeError:
+       continue
       
     # Compile all publications
     lop = [] # List[Publication]
@@ -125,21 +124,21 @@ def research(lod: List[Data]) -> List[Research]:
     # p's type is given by scholarly
     for p in lab.publications:
       # Only collect 50 publications max per lab
-      if (count > 5):
+      if (count > 10):
         break
-      # try:
-      p.fill()
-      # except AttributeError:
-      #   continue
-      bib = p.bib
-      custom_pub = None
       try:
-        custom_pub = Publication(bib['title'], bib['author'], int(bib['year']), get_citations(p.cites_per_year), bib['publisher'])
-      except KeyError:
-        custom_pub = Publication(bib['title'], '', int(bib['year']), get_citations(p.cites_per_year), '')
-        print(bib['title'] + ' was missing information')
-      lop.append(custom_pub)
-      count += 1
+        p.fill()
+        bib = p.bib
+        custom_pub = None
+        try:
+          custom_pub = Publication(bib['title'], bib['author'], int(bib['year']), get_citations(p.cites_per_year), bib['publisher'])
+        except KeyError:
+          custom_pub = Publication(bib['title'], 'n/a', int(bib['year']), get_citations(p.cites_per_year), 'n/a')
+          print(bib['title'] + ' was missing information')
+        lop.append(custom_pub)
+        count += 1
+      except:
+        continue
 
     # Attach professor to (sorted) publications
     # TODO: sorted(lop, lambda cp: cp.year)
@@ -161,7 +160,7 @@ def generate(lod: List[Data], output_file: str) -> None:
     writer.writerow(['Lab', 'Lab ID', 'Publications', 'Title', 'Author', 'Year', 'Cited By', 'Publisher'])
     r: Research
     for r in lor:
-      writer.writerow([r.lab, r.lab_id, '...'])
+      writer.writerow([r.lab, r.lab_id, '...', '', '', '', '', '',])
       p: Publication
       for p in r.publications:
         writer.writerow(['', '', '', p.title, format_authors(p.authors), p.year, p.citations, p.publisher])
