@@ -3,6 +3,8 @@
   "python.linting.pylintEnabled": true,
   "python.linting.enabled": true,
   "python.linting.lintOnSave": true,
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": ["-l 80"],
   "cSpell.ignoreWords": [
     "bcolors",
     "endc",

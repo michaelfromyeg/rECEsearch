@@ -27,7 +27,7 @@ Virtual environment quickstart (for Windows):
 ```bash
 pip install virtualenv
 virtualenv env
-source ./env/Scripts/active
+source ./env/Scripts/activate
 pip install -r requirements.txt
 pip freeze > requirements.txt
 ```
