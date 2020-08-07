@@ -259,8 +259,9 @@ def format_authors(authors: str) -> str:
     """
     Helper function to *cleanly* format authors
     """
-    if len(authors) > 20:
-        return authors[:100] + "..."
+    # TODO: figure out a better way to implement this... don't want to remove contributors
+    # if len(authors) > 20:
+    #     return authors[:100] + "..."
     return authors
 
 
