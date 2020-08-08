@@ -2,9 +2,7 @@
 
 A simple Python project to grab Google Scholar data for research at UBC.
 
-[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) 
-
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
 ## Requirements
 
@@ -22,7 +20,7 @@ Communication Systems,    PhdzKFcAAAAJ, http://ece.sites.olt.ubc.ca/research/com
 
 (Do not include the spaces if you choose to use this data.)
 
-Virtual environment quickstart (for Windows):
+Virtual environment quick start (for Windows):
 
 ```bash
 pip install virtualenv
@@ -41,6 +39,14 @@ _CITATIONAUTH = '/citations?hl=en&user={0}&sortby=pubdate'
 ```
 
 The "sortby=pubdate" is what we're after here.
+
+### And, as of August 8th, 2020 you should manually tweak one more thing
+
+In `_scholarly.py` change line 85 to contain:
+
+`patents: bool = False`
+
+Patents should be skipped for this use case.
 
 ## Usage
 

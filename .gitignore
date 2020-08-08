@@ -2,9 +2,9 @@
 */**.json
 
 # Pickle
-*/**.bak
-*/**.dir
-*/**.dat
+*.bak
+*.dir
+*.dat
 
 # So I don't get fired ._.
 data/ece.csv
