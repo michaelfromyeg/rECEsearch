@@ -75,6 +75,9 @@ class Research:
         if DEBUG:
             print("Starting in debug mode...")
         self.generate(self.read(self.input_file), self.output_file)
+    
+    def research_for_groups(self) -> List[ResearchData]:
+        return self.get_research(self.read(self.input_file))
 
     def read(self, filename: str) -> List[ExcelData]:
         """
@@ -82,10 +85,10 @@ class Research:
         """
 
         # List of csv data
-        lod = []  # type: List[Data]
+        lod = []  # type: List[ExcelData]
 
         try:
-            with open(f"../../data/{filename}") as csv_file:
+            with open(f"../data/{filename}") as csv_file:
 
                 # Setup CSV reader
                 csv_reader = csv.reader(csv_file, delimiter=",")
@@ -158,7 +161,7 @@ class Research:
             # p's type is given by scholarly
             max: int
             if DEBUG:
-                max = 2
+                max = 9
             else:
                 max = 50
             for publication in lab.publications:
@@ -213,7 +216,7 @@ class Research:
 
         # Write list of research data to a csv file
         with open(
-            f"../../output/{output_file}", "w", newline="", encoding="utf-8"
+            f"../output/{output_file}", "w", newline="", encoding="utf-8"
         ) as output:
             writer = csv.writer(output)
             writer.writerow(

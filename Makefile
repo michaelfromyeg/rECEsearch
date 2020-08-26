@@ -1,11 +1,13 @@
 start:
-	powershell ./env/Scripts/activate.ps1
+	powershell ./start.ps1
 try:
-	cd ./src/research && python research.py -i one.csv -o test.csv
+	cd ./src && python research.py -i one.csv -o test.csv
 run:
-	cd ./src/research && python research.py -i labs.csv -o output.csv
+	cd ./src && python research.py -i labs.csv -o output.csv
+groups:
+	cd ./src && python groups.py -i groups.csv -o groups_test.csv
 lint:
-	make format && cd ./src/research && pylint research.py
+	make format && cd ./src/research && pylint .
 format:
 	cd ./src && black . -l 80
 tests:
