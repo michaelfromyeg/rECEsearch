@@ -12,7 +12,7 @@ cffi==1.14.0
 chardet==3.0.4
 click==7.1.2
 colorama==0.4.3
-cryptography==3.3.2
+cryptography==39.0.1
 decorator==4.4.2
 fake-useragent==0.1.11
 future==0.18.2
